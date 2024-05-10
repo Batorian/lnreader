@@ -33,7 +33,6 @@ import { NovelStatus, PluginItem } from '@plugins/types';
 import { translateNovelStatus } from '@utils/translateEnum';
 import { getMMKVObject } from '@utils/mmkv/mmkv';
 import { AVAILABLE_PLUGINS } from '@hooks/persisted/usePlugins';
-import { toInteger } from 'lodash-es';
 
 interface NovelInfoHeaderProps {
   novel: NovelData;
@@ -90,15 +89,18 @@ const NovelInfoHeader = ({
     [],
   );
 
+  let pageName;
   if (novel.groupName) {
     let groupNames: string[] = [];
-    let pageIndex = toInteger(page);
+    let pageIndex = parseInt(page!);
     if (novel.groupName.split(',').length > 1) {
       groupNames = ['All Groups'].concat(novel.groupName.split(','));
-      page = groupNames[pageIndex];
+      pageName = groupNames[pageIndex - 1];
     } else {
-      page = novel.groupName;
+      pageName = novel.groupName;
     }
+  } else {
+    pageName = page;
   }
 
   return (
@@ -218,7 +220,7 @@ const NovelInfoHeader = ({
                 numberOfLines={2}
                 style={[{ color: theme.onSurface }, styles.pageTitle]}
               >
-                Page: {page}
+                Page: {pageName}
               </Text>
             ) : null}
             <Text style={[{ color: theme.onSurface }, styles.chapters]}>

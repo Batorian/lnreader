@@ -146,13 +146,30 @@ const Novel = ({ route, navigation }: NovelScreenProps) => {
   const onRefreshPage = (page: string) => {
     if (novel) {
       setUpdating(true);
-      updateNovelPage(pluginId, novel.path, novel.id, page, {
-        downloadNewChapters,
-      })
-        .then(() => getNovel())
-        .then(() => showToast(`Updated page: ${page}`))
-        .catch(e => showToast(e.message))
-        .finally(() => setUpdating(false));
+      if (novel.groupId) {
+        updateNovelPage(
+          pluginId,
+          novel.path,
+          novel.id,
+          page,
+          {
+            downloadNewChapters,
+          },
+          novel.groupId,
+        )
+          .then(() => getNovel())
+          .then(() => showToast(`Updated page: ${page}`))
+          .catch(e => showToast(e.message))
+          .finally(() => setUpdating(false));
+      } else {
+        updateNovelPage(pluginId, novel.path, novel.id, page, {
+          downloadNewChapters,
+        })
+          .then(() => getNovel())
+          .then(() => showToast(`Updated page: ${page}`))
+          .catch(e => showToast(e.message))
+          .finally(() => setUpdating(false));
+      }
     }
   };
 
@@ -351,6 +368,17 @@ const Novel = ({ route, navigation }: NovelScreenProps) => {
     }
   };
 
+  let pageNames: string[];
+  if (novel.groupName) {
+    if (novel.groupName.split(',').length > 1) {
+      pageNames = ['All Groups'].concat(novel.groupName.split(','));
+    } else {
+      pageNames = [novel.groupName];
+    }
+  } else {
+    pageNames = pages;
+  }
+
   return (
     <Drawer
       open={drawerOpen}
@@ -363,7 +391,7 @@ const Novel = ({ route, navigation }: NovelScreenProps) => {
       renderDrawerContent={() => (
         <NovelDrawer
           theme={theme}
-          pages={pages}
+          pages={pageNames}
           pageIndex={pageIndex}
           openPage={openPage}
           closeDrawer={closeDrawer}

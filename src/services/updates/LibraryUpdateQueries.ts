@@ -197,9 +197,15 @@ const updateNovelPage = async (
   novelId: number,
   page: string,
   options: Pick<UpdateNovelOptions, 'downloadNewChapters'>,
+  groupId?: string,
 ) => {
   const { downloadNewChapters } = options;
-  const sourcePage = await fetchPage(pluginId, novelPath, page);
+  let sourcePage;
+  if (groupId) {
+    sourcePage = await fetchPage(pluginId, novelPath, page, groupId);
+  } else {
+    sourcePage = await fetchPage(pluginId, novelPath, page);
+  }
   await updateNovelChapters(
     pluginId,
     novelId,

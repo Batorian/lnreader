@@ -343,7 +343,7 @@ export const useNovel = (novelPath: string, pluginId: string) => {
   }, []);
 
   const getChapters = useCallback(async () => {
-    const page = pages[pageIndex];
+    let page = pages[pageIndex];
     if (novel && page) {
       let chapters = await _getPageChapters(
         novel.id,
@@ -352,7 +352,17 @@ export const useNovel = (novelPath: string, pluginId: string) => {
         page,
       );
       if (!chapters.length) {
-        const sourcePage = await fetchPage(pluginId, novelPath, page);
+        let sourcePage;
+        if (novel.groupId) {
+          sourcePage = await fetchPage(
+            pluginId,
+            novelPath,
+            page,
+            novel.groupId,
+          );
+        } else {
+          sourcePage = await fetchPage(pluginId, novelPath, page);
+        }
         const sourceChapters = sourcePage.chapters.map(ch => {
           return {
             ...ch,

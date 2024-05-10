@@ -46,11 +46,12 @@ export const fetchPage = async (
   if (!plugin || !plugin.parsePage) {
     throw new Error('Cant parse page!');
   }
+  let res;
   if (groupId) {
-    const res = await plugin.parsePage(novelPath, page, groupId);
-    return res;
+    res = await plugin.parsePage(novelPath, page, groupId);
+  } else {
+    res = await plugin.parsePage(novelPath, page);
   }
-  const res = await plugin.parsePage(novelPath, page);
   return res;
 };
 
