@@ -10,6 +10,8 @@ export interface NovelInfo {
   artist?: string;
   status?: NovelStatus | string;
   genres?: string;
+  groupName?: string;
+  groupId?: string;
   inLibrary: boolean;
   isLocal: boolean;
   totalPages: number;

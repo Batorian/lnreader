@@ -20,7 +20,7 @@ export const insertNovelAndChapters = async (
   sourceNovel: SourceNovel,
 ): Promise<number | undefined> => {
   const insertNovelQuery =
-    'INSERT INTO Novel (path, pluginId, name, cover, summary, author, artist, status, genres, totalPages) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    'INSERT INTO Novel (path, pluginId, name, cover, summary, author, artist, status, genres, groupName, groupId, totalPages) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   const novelId: number | undefined = await new Promise(resolve => {
     db.transaction(tx => {
       tx.executeSql(
@@ -35,6 +35,8 @@ export const insertNovelAndChapters = async (
           sourceNovel.artist || null,
           sourceNovel.status || null,
           sourceNovel.genres || null,
+          sourceNovel.groupName || null,
+          sourceNovel.groupId || null,
           sourceNovel.totalPages || 0,
         ],
         async (txObj, resultSet) => resolve(resultSet.insertId),
@@ -212,6 +214,8 @@ export const restoreLibrary = async (novel: NovelInfo) => {
           novel.artist || '',
           novel.status || '',
           novel.genres || '',
+          novel.groupName || '',
+          novel.groupId || '',
           sourceNovel.totalPages || 0,
         ],
         async (txObj, { insertId }) => resolve(insertId),
@@ -248,7 +252,7 @@ export const restoreLibrary = async (novel: NovelInfo) => {
 export const updateNovelInfo = async (info: NovelInfo) => {
   db.transaction(tx => {
     tx.executeSql(
-      'UPDATE Novel SET name = ?, cover = ?, path = ?, summary = ?, author = ?, artist = ?, genres = ?, status = ?, isLocal = ? WHERE id = ?',
+      'UPDATE Novel SET name = ?, cover = ?, path = ?, summary = ?, author = ?, artist = ?, genres = ?, status = ?, groupName = ?, groupId = ?, isLocal = ? WHERE id = ?',
       [
         info.name,
         info.cover || '',
@@ -258,6 +262,8 @@ export const updateNovelInfo = async (info: NovelInfo) => {
         info.artist || '',
         info.genres || '',
         info.status || '',
+        info.groupName || '',
+        info.groupId || '',
         Number(info.isLocal),
         info.id,
       ],

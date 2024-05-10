@@ -40,10 +40,15 @@ export const fetchPage = async (
   pluginId: string,
   novelPath: string,
   page: string,
+  groupId?: string,
 ) => {
   const plugin = getPlugin(pluginId);
   if (!plugin || !plugin.parsePage) {
     throw new Error('Cant parse page!');
+  }
+  if (groupId) {
+    const res = await plugin.parsePage(novelPath, page, groupId);
+    return res;
   }
   const res = await plugin.parsePage(novelPath, page);
   return res;

@@ -14,8 +14,18 @@ const updateNovelMetadata = (
   novel: SourceNovel,
 ) => {
   return new Promise(async (resolve, reject) => {
-    let { name, cover, summary, author, artist, genres, status, totalPages } =
-      novel;
+    let {
+      name,
+      cover,
+      summary,
+      author,
+      artist,
+      genres,
+      status,
+      groupName,
+      groupId,
+      totalPages,
+    } = novel;
     const novelDir = NovelDownloadFolder + '/' + pluginId + '/' + novelId;
     if (!(await RNFS.exists(novelDir))) {
       await RNFS.mkdir(novelDir);
@@ -36,7 +46,7 @@ const updateNovelMetadata = (
       tx.executeSql(
         `UPDATE Novel SET 
           name = ?, cover = ?, summary = ?, author = ?, artist = ?, 
-          genres = ?, status = ?, totalPages = ?
+          genres = ?, status = ?, groupName = ?, groupId = ?, totalPages = ?
           WHERE id = ?
         `,
         [
@@ -47,6 +57,8 @@ const updateNovelMetadata = (
           artist || null,
           genres || null,
           status || null,
+          groupName || null,
+          groupId || null,
           totalPages || 0,
           novelId,
         ],

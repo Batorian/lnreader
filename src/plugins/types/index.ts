@@ -30,6 +30,8 @@ export interface SourceNovel extends NovelItem {
   author?: string;
   artist?: string;
   status?: NovelStatus;
+  groupName?: string;
+  groupId?: string;
   chapters: ChapterItem[];
   totalPages?: number;
 }
@@ -62,7 +64,11 @@ export interface Plugin extends PluginItem {
     options?: PopularNovelsOptions<Filters>,
   ) => Promise<NovelItem[]>;
   parseNovel: (novelPath: string) => Promise<SourceNovel>;
-  parsePage?: (novelPath: string, page: string) => Promise<SourcePage>;
+  parsePage?: (
+    novelPath: string,
+    page: string,
+    groupId?: string,
+  ) => Promise<SourcePage>;
   parseChapter: (chapterPath: string) => Promise<string>;
   searchNovels: (searchTerm: string, pageNo: number) => Promise<NovelItem[]>;
   fetchImage: (url: string) => Promise<string>;
