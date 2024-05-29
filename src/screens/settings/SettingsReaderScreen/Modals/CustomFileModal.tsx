@@ -34,7 +34,7 @@ const CustomFileModal: React.FC<CustomFileModal> = ({
   description,
 }) => {
   const theme = useTheme();
-  const [text, setText] = useState('');
+  let [text, setText] = useState(defaultValue);
 
   const openDocumentPicker = async () => {
     try {
