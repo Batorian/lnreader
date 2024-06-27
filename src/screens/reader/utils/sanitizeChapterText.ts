@@ -32,12 +32,14 @@ export const sanitizeChapterText = (
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
       'a',
       'b',
+      'details',
       'div',
       'em',
       'i',
       'img',
       'li',
       'ol',
+      'summary',
     ]),
     allowedAttributes: {
       'a': ['href', 'class', 'id'],
